@@ -13,9 +13,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // theme: ThemeData(
-      //   colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      // ),
       home: HomePage(title: '진파르타`s Tasks',),
     );
   }

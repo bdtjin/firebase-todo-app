@@ -51,7 +51,24 @@ class _HomePageState extends State<HomePage> {
 
       body: todos.isEmpty
           ? NoTodo()
-          : TodoListView(),
+          : TodoListView(todo:todos,
+          // TodoListView 2-3. 데이터, 생성자 만들고 전달
+          onToggleFavorite: (index) {
+            setState(() {
+              todos [index] = todos[index].copyWith(isFavorite: !todos[index].isFavorite);
+            });
+          },
+          onToggleleDone: (index) {
+            setState(() {
+              todos[index] = todos[index].copyWith(isDone: !todos[index].isDone);
+            });
+          },
+          onToggleDelete: (index) {
+            setState(() {
+              todos.removeAt(index);
+            });
+          },
+          ),
 
       // FAB 누르면 바텀에 addToDo
       floatingActionButton: FloatingActionButton(
