@@ -1,6 +1,7 @@
-import 'package:firebase_todo_app/ui/home/widgets/home_bottom.dart';
-import 'package:firebase_todo_app/ui/home/widgets/home_no_todo.dart';
-import 'package:firebase_todo_app/ui/home/widgets/to_do_entity.dart';
+import 'package:firebase_todo_app/ui/home/widgets/bottom_add_todo.dart';
+import 'package:firebase_todo_app/ui/home/widgets/no_todo.dart';
+import 'package:firebase_todo_app/data/model/todo_entity.dart';
+import 'package:firebase_todo_app/ui/home/widgets/todo_list_view.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,14 +19,17 @@ class _HomePageState extends State<HomePage> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (context) => AddToDoBottom(
+      builder: (context) => BottomAddTodo(
         deliver: (title, description, isFavorite, isDone) {
           setState(() {
-            todos.add(ToDoEntity(
-              title: title, 
-              description: description, 
-              isFavorite: isFavorite, 
-              isDone: isDone),);
+            todos.add(
+              ToDoEntity(
+                title: title,
+                description: description,
+                isFavorite: isFavorite,
+                isDone: isDone,
+              ),
+            );
           });
         },
       ),
@@ -47,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 
       body: todos.isEmpty
           ? NoTodo()
-          : NoTodo(),
+          : TodoListView(),
 
       // FAB 누르면 바텀에 addToDo
       floatingActionButton: FloatingActionButton(

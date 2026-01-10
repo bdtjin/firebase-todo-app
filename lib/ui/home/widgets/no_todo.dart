@@ -12,13 +12,15 @@ class NoTodo extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Container(
-          width: 350,
-          height: 210,
+          width: double.infinity,
+          margin: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             color: Color.fromARGB(255, 224, 219, 219),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
                 'assets/images/todo.webp',
