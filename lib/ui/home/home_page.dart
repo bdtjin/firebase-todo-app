@@ -1,18 +1,20 @@
+import 'package:firebase_todo_app/ui/home/home_view_model.dart';
 import 'package:firebase_todo_app/ui/home/widgets/bottom_add_todo.dart';
 import 'package:firebase_todo_app/ui/home/widgets/no_todo.dart';
 import 'package:firebase_todo_app/data/model/todo_entity.dart';
 import 'package:firebase_todo_app/ui/home/widgets/todo_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key, required this.title});
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   List<ToDoEntity> todos = [];
 
   void addToDo(BuildContext context) {
@@ -24,6 +26,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             todos.add(
               ToDoEntity(
+                id: "",
                 title: title,
                 description: description,
                 isFavorite: isFavorite,
@@ -38,6 +41,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final todos = ref.watch(homeViewModelProvider); // 홈뷰모델을 관리할거야! 선언
     return Scaffold(
       backgroundColor: Colors.grey[200],
 
@@ -51,8 +55,8 @@ class _HomePageState extends State<HomePage> {
 
       body: todos.isEmpty
           ? NoTodo()
-          : TodoListView(todo:todos,
-          // TodoListView 2-3. 데이터, 생성자 만들고 전달
+          : TodoListView( // TodoListView 2-3. 데이터, 생성자 만들고 전달
+          //
           onToggleFavorite: (index) {
             setState(() {
               todos [index] = todos[index].copyWith(isFavorite: !todos[index].isFavorite);
@@ -63,11 +67,10 @@ class _HomePageState extends State<HomePage> {
               todos[index] = todos[index].copyWith(isDone: !todos[index].isDone);
             });
           },
-          onToggleDelete: (index) {
-            setState(() {
-              todos.removeAt(index);
-            });
-          },
+          // onToggleDelete: (index) {
+          //   print('삭제 클릭');
+          //    ref.read(homeViewModelProvider.notifier).deleteToDo(id: todos[index].id);
+          // },
           ),
 
       // FAB 누르면 바텀에 addToDo

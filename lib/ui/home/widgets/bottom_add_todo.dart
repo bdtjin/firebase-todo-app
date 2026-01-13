@@ -1,14 +1,17 @@
+import 'package:firebase_todo_app/data/model/todo_entity.dart';
+import 'package:firebase_todo_app/ui/home/home_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BottomAddTodo extends StatefulWidget {
+class BottomAddTodo extends ConsumerStatefulWidget {
   final Function(String, String, bool, bool) deliver;
   const BottomAddTodo({required this.deliver});
 
   @override
-  State<BottomAddTodo> createState() => _AddToDoBottomState();
+  ConsumerState<BottomAddTodo> createState() => _AddToDoBottomState();
 }
 
-class _AddToDoBottomState extends State<BottomAddTodo> {
+class _AddToDoBottomState extends ConsumerState<BottomAddTodo> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -19,12 +22,14 @@ class _AddToDoBottomState extends State<BottomAddTodo> {
 
   // 4. 저장 후 넘겨야할 값들 (함수)
   void saveToDo() {
+    // Riverpod을 통해 HomeViewModel의 notifier 가져오기
+    final vm = ref.read(homeViewModelProvider.notifier);
     if (titleController.text.isEmpty) return;
-    widget.deliver(
-      titleController.text,
-      descriptionController.text,
-      isFavorite,
-      false,
+    // ToDoEntity 객체를 만들기
+    vm.addToDo(
+      title: titleController.text,
+      description: descriptionController.text,
+      isFavorite: isFavorite,
     );
     Navigator.of(context).pop();
   }
