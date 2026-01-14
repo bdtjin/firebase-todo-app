@@ -1,26 +1,13 @@
-import 'package:firebase_todo_app/data/model/todo_entity.dart';
 import 'package:firebase_todo_app/ui/home/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TodoListView extends ConsumerWidget {
-  // 2. 데이터 정의 (완료 시 실행할 함수)
-  // final List<ToDoEntity> todo;
-  // final Function(int index) onToggleFavorite;
-  // final Function(int index) onToggleleDone;
-  // final Function(int index) onToggleDelete;
-
-  // // 3. 생성자 만들기 
-  // const TodoListView({
-  //   required this.todo,
-  //   // required this.onToggleFavorite,
-  //   // required this.onToggleleDone,
-  //   // required this.onToggleDelete,
-  // });
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.read(homeViewModelProvider.notifier); //// 완료 ViewModel 구현 후 구독
+    // 5. onToggle 대신 ViewModel 구현 완료 후 ref 작성
+    // UI에서 이벤트 발생 시에 HomeViewModel 작성한 함수 실행
+    final vm = ref.read(homeViewModelProvider.notifier);
     final todos = ref.watch(homeViewModelProvider);
 
     // 1. todo Container 작업 -> ListView.builder 씌우기
@@ -40,19 +27,9 @@ class TodoListView extends ConsumerWidget {
           // 4. 아이콘 생성 및 데이터 전달 작업
           child: Row(
             children: [
-              Expanded(
-                child: Text( // 할일 제목
-                  item.title, 
-                  style: TextStyle(
-                    fontSize: 16,
-                    decoration: item.isDone ? TextDecoration.lineThrough : null,
-                  color: item.isDone ? Colors.grey : Colors.black,
-                    ),
-                ),
-                ),
-              IconButton( // 완료버튼
+              IconButton(      // 힐 일 완료 버튼
                 onPressed: () {
-                  vm.toggleDone(isDone: !item.isDone, id: item.id);
+                  vm.toggleDone(isDone: !item.isDone, id: item.id,); ///////////////////////////
                 },
                 icon: Icon(
                   item.isDone
@@ -61,8 +38,19 @@ class TodoListView extends ConsumerWidget {
                   color: item.isDone ? Colors.green : Colors.grey,
                 ),
               ),
-                
-              IconButton( // 즐겨찾기 
+
+              Expanded(
+                child: Text(  // 할 일 Title 
+                  item.title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    decoration: item.isDone ? TextDecoration.lineThrough : null,
+                    color: item.isDone ? Colors.grey : Colors.black,
+                  ),
+                ),
+              ),
+
+              IconButton(    // 즐겨찾기 버튼
                 onPressed: () {
                   vm.toggleFavorite(isFavorite: !item.isFavorite, id: item.id);
                 },
@@ -72,11 +60,10 @@ class TodoListView extends ConsumerWidget {
                 ),
               ),
 
-              IconButton( // 삭제
+              IconButton(    // 삭제 버튼
                 onPressed: () {
-                  print('UI 에서 삭제 버튼 클릭');  
                   vm.deleteToDo(id: item.id);
-                  },
+                },
                 icon: Icon(Icons.delete_outline, color: Colors.grey),
               ),
             ],
