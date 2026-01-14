@@ -20,7 +20,7 @@ class TodoListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.read(homeViewModelProvider.notifier); ////
+    final vm = ref.read(homeViewModelProvider.notifier); //// ViewModel 구현 후 구독
     final todos = ref.watch(homeViewModelProvider);
 
     // 1. todo Container 작업 -> ListView.builder 씌우기
@@ -71,7 +71,6 @@ class TodoListView extends ConsumerWidget {
                 onPressed: () {
                   print('UI 에서 삭제 버튼 클릭');  
                   onToggleDelete(index);
-                  vm.deleteToDo(id: todos[index].id);
                   },
                 icon: Icon(Icons.delete_outline, color: Colors.grey),
               ),

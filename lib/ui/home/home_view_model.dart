@@ -1,4 +1,4 @@
-// 1. 생략
+// 1. 생략 (todo_list_view.dart 구성했으니 생략)
 
 // 2. 뷰모델 만들기
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +6,7 @@ import 'package:firebase_todo_app/data/model/todo_entity.dart';
 import 'package:firebase_todo_app/data/repository/todo_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// 2. ViewModel 구현
 class HomeViewModel extends Notifier<List<ToDoEntity>> {
   @override
   List<ToDoEntity> build() {
@@ -31,7 +32,7 @@ class HomeViewModel extends Notifier<List<ToDoEntity>> {
       // todos collection 에서 미리 아이디를 만든다. -> firebase에 들어갈 아이값을 미리 정함
       final docId = FirebaseFirestore.instance.collection('todos').doc().id;
       final ToDoEntity newtodo = ToDoEntity(
-      id: docId, 
+      id: docId, // 임의로 id 넣어줌
       title: title, 
       description: description, 
       isFavorite: isFavorite, 
