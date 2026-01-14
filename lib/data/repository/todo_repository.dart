@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class TodoRepository {
   // 문서 생성 과정
   Future<List<ToDoEntity>?> getTodos() async {
-    try {
+    // try {
       FirebaseFirestore firestore = FirebaseFirestore.instance; // 파이어베이스 가져올거야
       final collectionRef = firestore.collection('todos'); //  todos 라는거를 참조할거야
       final result = await collectionRef.get(); // 이거 가져올거야
@@ -15,13 +15,15 @@ class TodoRepository {
 
       return docs.map((todo) {
         // docs를 fromJson해서 아이디랑 데이터랑 합쳐주는 작업
-        final map = {'id': todo.id, ...todo.data()};
-        print('가져온 데이터: ${todo.id}');
-        return ToDoEntity.fromJson(map);
+        // final map = {'id': todo.id, ...todo.data()};
+        // print('가져온 데이터: ${todo.data()}');
+        // print('새로운 맵: ${map}');
+        return ToDoEntity.fromJson(todo.data());
       }).toList();
-    } catch (e) {
-      print(e);
-    }
+    // } 
+    // catch (e) {
+    //   print(e);
+    // }
   }
 
   // 1. 할 일 추가 (Insert) 함수 구현
@@ -55,5 +57,13 @@ class TodoRepository {
     final collectionRef = firestore.collection('todos');
     final docRef = collectionRef.doc(todo.id);
     await docRef.update(todo.toJson());
+  }
+
+  // 4. 즐겨찾기 (Insert) 함수 구현
+  Future<void> toggleFavorite({required ToDoEntity todo}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final collectionRef = firestore.collection('todos');
+    final docRef = collectionRef.doc(todo.id);
+    await docRef.update({'isFavorite': todo.isFavorite});
   }
 }

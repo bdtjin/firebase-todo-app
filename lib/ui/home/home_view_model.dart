@@ -41,8 +41,13 @@ class HomeViewModel extends Notifier<List<ToDoEntity>> {
     await todoRepo.getTodos();
   }
 
-  // ViewModel - 할 일 즐겨찾기
-  Future<void> toggleFavorite({required bool isFavorite}) async {}
+  // ViewModel - 할 일 삭제하기
+  Future<void> deleteToDo({required String id}) async {
+    print('삭제 요청 아이디: ${id}');
+    await todoRepo.deleteToDo(id); // 삭제하는 작업
+    // UI 상태에 반영하는 작업 + delete는 Id 값빼고 상태에 반영해줘야함
+    state = state.where((todo) => todo.id != id).toList();
+  }
 
   // ViewModel - 할 일 완료
   Future<void> toggleDone({required bool isDone, required String id}) async {
@@ -53,12 +58,12 @@ class HomeViewModel extends Notifier<List<ToDoEntity>> {
     state = state.map((todo) => todo.id == id ? updateTodo : todo).toList();
   }
 
-  // ViewModel - 할 일 삭제하기
-  Future<void> deleteToDo({required String id}) async {
-    print('삭제 요청 아이디: ${id}');
-    await todoRepo.deleteToDo(id); // 삭제하는 작업
-    // UI 상태에 반영하는 작업 + delete는 Id 값빼고 상태에 반영해줘야함
-    state = state.where((todo) => todo.id != id).toList();
+  // ViewModel - 할 일 즐겨찾기
+  Future<void> toggleFavorite({required bool isFavorite, required String id}) async {
+    final newTodo = state.firstWhere((todo) => todo.id == id);
+    final leFavoriteTodo = newTodo.copyWith(isFavorite: isFavorite);
+    await todoRepo.toggleFavorite(todo: leFavoriteTodo);
+    state = state.map((todo) => todo.id == id? leFavoriteTodo : todo).toList();
   }
 }
 

@@ -15,26 +15,26 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  List<ToDoEntity> todos = [];
+  // List<ToDoEntity> todos = [];
 
   void addToDo(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) => BottomAddTodo(
-        deliver: (title, description, isFavorite, isDone) {
-          setState(() {
-            todos.add(
-              ToDoEntity(
-                id: "",
-                title: title,
-                description: description,
-                isFavorite: isFavorite,
-                isDone: isDone,
-              ),
-            );
-          });
-        },
+        // deliver: (title, description, isFavorite, isDone) {
+        //   setState(() {
+        //     todos.add(
+        //       ToDoEntity(
+        //         id: "",
+        //         title: title,
+        //         description: description,
+        //         isFavorite: isFavorite,
+        //         isDone: isDone,
+        //       ),
+        //     );
+        //   });
+        // },
       ),
     );
   }
@@ -57,25 +57,26 @@ class _HomePageState extends ConsumerState<HomePage> {
           ? NoTodo()
           : TodoListView(
               // TodoListView 2-3. 데이터, 생성자 만들고 전달
-              todo: todos,
-              onToggleFavorite: (index) {
-                setState(() {
-                  todos[index] = todos[index].copyWith(
-                    isFavorite: !todos[index].isFavorite,
-                  );
-                });
-              },
+              // todo: todos,
+              // onToggleFavorite: (index) {
+              //   setState(() {
+              //     todos[index] = todos[index].copyWith(
+              //       isFavorite: !todos[index].isFavorite,
+              //     );
+              //   });
+              // },
+              //--------------------------------------------------------------------
               // onToggleleDone: (index) {
               //   setState(() {
               //     todos[index] = todos[index].copyWith(isDone: !todos[index].isDone);
               //   });
               // },
-              onToggleDelete: (index) {
-                print('삭제 클릭');
-                // ViewModel 구현 완료 후 UI에 적용되도록 구현 !!
-                ref.read(homeViewModelProvider.notifier)
-                   .deleteToDo(id: todos[index].id);
-              },
+              // onToggleDelete: (index) {
+              //   print('삭제 클릭');
+              //   // ViewModel 구현 완료 후 UI에 적용되도록 구현 !!
+              //   ref.read(homeViewModelProvider.notifier)
+              //      .deleteToDo(id: todos[index].id);
+              // },
             ),
 
       // FAB 누르면 바텀에 addToDo

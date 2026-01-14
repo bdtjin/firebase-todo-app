@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BottomAddTodo extends ConsumerStatefulWidget {
-  final Function(String, String, bool, bool) deliver;
-  const BottomAddTodo({required this.deliver});
+  // final Function(String, String, bool, bool) deliver;
+  // const BottomAddTodo({required this.deliver});
 
   @override
   ConsumerState<BottomAddTodo> createState() => _AddToDoBottomState();
