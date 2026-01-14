@@ -55,24 +55,28 @@ class _HomePageState extends ConsumerState<HomePage> {
 
       body: todos.isEmpty
           ? NoTodo()
-          : TodoListView( // TodoListView 2-3. 데이터, 생성자 만들고 전달
-          todo: todos,
-          onToggleFavorite: (index) {
-            setState(() {
-              todos [index] = todos[index].copyWith(isFavorite: !todos[index].isFavorite);
-            });
-          },
-          onToggleleDone: (index) {
-            setState(() {
-              todos[index] = todos[index].copyWith(isDone: !todos[index].isDone);
-            });
-          },
-          onToggleDelete: (index) {
-            print('삭제 클릭');
-            // ViewModel 구현 완료 후 UI에 적용되도록 구현 !!
-             ref.read(homeViewModelProvider.notifier).deleteToDo(id: todos[index].id);
-          },
-          ),
+          : TodoListView(
+              // TodoListView 2-3. 데이터, 생성자 만들고 전달
+              todo: todos,
+              onToggleFavorite: (index) {
+                setState(() {
+                  todos[index] = todos[index].copyWith(
+                    isFavorite: !todos[index].isFavorite,
+                  );
+                });
+              },
+              // onToggleleDone: (index) {
+              //   setState(() {
+              //     todos[index] = todos[index].copyWith(isDone: !todos[index].isDone);
+              //   });
+              // },
+              onToggleDelete: (index) {
+                print('삭제 클릭');
+                // ViewModel 구현 완료 후 UI에 적용되도록 구현 !!
+                ref.read(homeViewModelProvider.notifier)
+                   .deleteToDo(id: todos[index].id);
+              },
+            ),
 
       // FAB 누르면 바텀에 addToDo
       floatingActionButton: FloatingActionButton(

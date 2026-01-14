@@ -7,14 +7,14 @@ class TodoListView extends ConsumerWidget {
   // 2. 데이터 정의 (완료 시 실행할 함수)
   final List<ToDoEntity> todo;
   final Function(int index) onToggleFavorite;
-  final Function(int index) onToggleleDone;
+  // final Function(int index) onToggleleDone;
   final Function(int index) onToggleDelete;
 
   // 3. 생성자 만들기 
   const TodoListView({
     required this.todo,
     required this.onToggleFavorite,
-    required this.onToggleleDone,
+    // required this.onToggleleDone,
     required this.onToggleDelete,
   });
 
@@ -41,7 +41,9 @@ class TodoListView extends ConsumerWidget {
           child: Row(
             children: [
               IconButton( // 완료버튼
-                onPressed: () => onToggleleDone(index),
+                onPressed: () {
+                  vm.toggleDone(isDone: !item.isDone, id: item.id);
+                },
                 icon: Icon(
                   item.isDone
                       ? Icons.check_circle

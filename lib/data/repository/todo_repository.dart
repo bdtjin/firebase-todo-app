@@ -1,22 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_todo_app/data/model/todo_entity.dart';
 import 'package:flutter/material.dart';
 
-// 1. Repository 저장소 정의를 한다. (문서 조회 과정) 
+// Repository 저장소 정의를 하는 공간
 class TodoRepository {
-  Future<void> updateToDo(ToDoEntity toDo) async {}
-  Future<void> deleteToDo(String id) async {
-    try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      // 삭제 할 수 있도록 레포지토리 만들기
-      final collectionRef = firestore.collection('todos');
-      final docRef = collectionRef.doc(id);
-      await docRef.delete();
-    } catch (e) {
-      print('삭제 실패 : $e');
-    }
-  }
-
   // 문서 생성 과정
   Future<List<ToDoEntity>?> getTodos() async {
     try {
@@ -36,7 +24,7 @@ class TodoRepository {
     }
   }
 
-  // 할 일 추가 (Insert) 함수 구현
+  // 1. 할 일 추가 (Insert) 함수 구현
   // id, title, description, favorite, isDone => firebase에 저장해줘!
   Future<void> insert({required ToDoEntity todo}) async {
     // 1) Firestore 인스턴스를 가져오기 (이제 데이터베이스 접근 권한 가짐)
@@ -47,5 +35,25 @@ class TodoRepository {
     final docRef = collectionRef.doc(todo.id); // todo.id 값을 바꿔치기
     // 4) 직렬화하기 (json 형태로 변환)
     await docRef.set(todo.toJson());
+  }
+
+  // 2. 할 일 삭제 (Insert) 함수 구현
+  Future<void> deleteToDo(String id) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final collectionRef = firestore.collection('todos');
+      final docRef = collectionRef.doc(id);
+      await docRef.delete();
+    } catch (e) {
+      print('삭제 실패 : $e');
+    }
+  }
+
+  // 3. 업데이트 되게 할 (Insert) 함수 구현
+  Future<void> updateToDo({required ToDoEntity todo}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final collectionRef = firestore.collection('todos');
+    final docRef = collectionRef.doc(todo.id);
+    await docRef.update(todo.toJson());
   }
 }
