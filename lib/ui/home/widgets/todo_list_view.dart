@@ -29,7 +29,7 @@ class TodoListView extends ConsumerWidget {
             children: [
               IconButton(      // 힐 일 완료 버튼
                 onPressed: () {
-                  vm.toggleDone(isDone: !item.isDone, id: item.id,); ///////////////////////////
+                  vm.toggleDone(isDone: !item.isDone, id: item.id,); // 위에 만든 vm 함수 전달받아서 실행
                 },
                 icon: Icon(
                   item.isDone
@@ -52,7 +52,7 @@ class TodoListView extends ConsumerWidget {
 
               IconButton(    // 즐겨찾기 버튼
                 onPressed: () {
-                  vm.toggleFavorite(isFavorite: !item.isFavorite, id: item.id);
+                  vm.toggleFavorite(isFavorite: !item.isFavorite, id: item.id); // 위에 만든 vm 함수 전달받아서 실행
                 },
                 icon: Icon(
                   item.isFavorite ? Icons.star : Icons.star_border,
@@ -62,7 +62,7 @@ class TodoListView extends ConsumerWidget {
 
               IconButton(    // 삭제 버튼
                 onPressed: () {
-                  vm.deleteToDo(id: item.id);
+                  vm.deleteToDo(id: item.id); // 위에 만든 vm 함수 전달받아서 실행
                 },
                 icon: Icon(Icons.delete_outline, color: Colors.grey),
               ),
