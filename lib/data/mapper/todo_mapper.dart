@@ -2,8 +2,7 @@ import '../../domain/entity/todo_entity.dart';
 import '../model/todo_dto.dart';
 
 // DTO -> Entity
-// Mapper : 기존의 dto를 entity로 변환해주는 역할
-// 유지 보수가 쉽고 확장이 가능한 전문적인 구조를 사용할 때 변환 로직
+// 기존의 DTO를 Domain Entity로 변환해주는 작업
 extension ToDomain on ToDoDto {
   TodoEntity toDomain() {
     return TodoEntity(
@@ -17,6 +16,7 @@ extension ToDomain on ToDoDto {
 }
 
 // Entity -> DTO
+// 기존의 Entity를 DTO로 변환해주는 작업
 extension ToDto on TodoEntity {
   ToDoDto toDto() {
     return ToDoDto(
