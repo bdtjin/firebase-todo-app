@@ -1,7 +1,7 @@
-import 'package:firebase_todo_app/ui/home/home_view_model.dart';
-import 'package:firebase_todo_app/ui/home/widgets/bottom_add_todo.dart';
-import 'package:firebase_todo_app/ui/home/widgets/no_todo.dart';
-import 'package:firebase_todo_app/ui/home/widgets/todo_list_view.dart';
+import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
+import 'package:firebase_todo_app/presentation/home/ui/widgets/bottom_add_todo.dart';
+import 'package:firebase_todo_app/presentation/home/ui/widgets/no_todo.dart';
+import 'package:firebase_todo_app/presentation/home/ui/widgets/todo_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

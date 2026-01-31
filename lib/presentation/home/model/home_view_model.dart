@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_todo_app/data/model/todo_entity.dart';
+import 'package:firebase_todo_app/data/model/todo_dto.dart';
 import 'package:firebase_todo_app/data/repository/todo_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

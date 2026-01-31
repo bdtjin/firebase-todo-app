@@ -1,4 +1,4 @@
-import 'package:firebase_todo_app/ui/home/home_view_model.dart';
+import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,7 +1,6 @@
 
-
-class ToDoEntity {
-  ToDoEntity({
+class ToDoDto {
+  ToDoDto({
     required this.id,
     required this.title,
     required this.description,
@@ -17,14 +16,14 @@ class ToDoEntity {
 
   // 데이터 변경 시에 데이터에 일부만 변경 후 새로운 객체 데이터로 만듬
   // copyWith: 특정 값만 바꿔서 새로운 복사본을 만드는 함수
-  ToDoEntity copyWith ({
+  ToDoDto copyWith ({
     String? id,
     String? title,
     String? description,
     bool? isFavorite,
     bool? isDone,
   }) {
-    return ToDoEntity(
+    return ToDoDto(
       id: id ?? this.id,
       title: title ?? this.title, 
       description: description ?? this.description, 
@@ -38,7 +37,7 @@ class ToDoEntity {
     return 'ToDo(id: $id, title: $title, description: $description, isFavorite: $isFavorite, isDone: $isDone)';
   }
 
-  ToDoEntity.fromJson(Map<String, dynamic> map)
+  ToDoDto.fromJson(Map<String, dynamic> map)
   : this (
     id: map ['id'],
     title: map ['title'],
