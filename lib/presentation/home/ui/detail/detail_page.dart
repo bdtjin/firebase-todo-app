@@ -14,7 +14,21 @@ class DetailPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(todo.title),
+        // Hero 위젯 추가 (동일한 tag 적용)
+        title: Hero(
+          tag: 'todo-title-${todo.id}',
+          child: Material(
+            color: Colors.transparent,
+            child: Text(
+              todo.title,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () {

@@ -49,12 +49,19 @@ class TodoListView extends ConsumerWidget {
                   },
                   child: Padding( // 클릭 시에 영역 확장
                     padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: Text(  // 할 일 Title 
-                      item.title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        decoration: item.isDone ? TextDecoration.lineThrough : null,
-                        color: item.isDone ? Colors.grey : Colors.black,
+                    // Hero 위젯 추가 (동일한 tag 적용)
+                    child: Hero(
+                      tag: 'todo-title-${item.id}',
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Text(  // 할 일 Title 
+                          item.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            decoration: item.isDone ? TextDecoration.lineThrough : null,
+                            color: item.isDone ? Colors.grey : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                   ),
