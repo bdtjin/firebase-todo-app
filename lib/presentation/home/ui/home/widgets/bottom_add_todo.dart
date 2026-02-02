@@ -1,10 +1,11 @@
+import 'package:firebase_todo_app/domain/entity/todo_entity.dart';
 import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BottomAddTodo extends ConsumerStatefulWidget {
-  // final Function(String, String, bool, bool) deliver;
-  // const BottomAddTodo({required this.deliver});
+  final TodoEntity? todo;
+  const BottomAddTodo({super.key, this.todo});
 
   @override
   ConsumerState<BottomAddTodo> createState() => _AddToDoBottomState();
@@ -24,12 +25,25 @@ class _AddToDoBottomState extends ConsumerState<BottomAddTodo> {
     // Riverpod을 통해 HomeViewModel의 notifier 가져오기
     final vm = ref.read(homeViewModelProvider.notifier);
     if (titleController.text.isEmpty) return;
-    // ToDoEntity 객체를 만들기
-    vm.addToDo(
-      title: titleController.text,
-      description: descriptionController.text,
-      isFavorite: isFavorite,
-    );
+    
+    // 수정 모드
+    if (widget.todo != null) {
+      vm.updateTodo(
+        id: widget.todo!.id,
+        title: titleController.text,
+        description: descriptionController.text,
+        isFavorite: isFavorite,
+        isDone: widget.todo!.isDone,
+      );
+    } 
+    // 생성 모드
+    else {
+      vm.addToDo(
+        title: titleController.text,
+        description: descriptionController.text,
+        isFavorite: isFavorite,
+      );
+    }
     Navigator.of(context).pop();
   }
 
@@ -37,6 +51,13 @@ class _AddToDoBottomState extends ConsumerState<BottomAddTodo> {
   @override
   void initState() {
     super.initState();
+    if (widget.todo != null) {
+      titleController.text = widget.todo!.title;
+      descriptionController.text = widget.todo!.description ?? '';
+      isFavorite = widget.todo!.isFavorite;
+      canSave = true;
+    }
+
     titleController.addListener(() {
       setState(() {
         canSave = titleController.text.isNotEmpty;
@@ -115,7 +136,7 @@ class _AddToDoBottomState extends ConsumerState<BottomAddTodo> {
                     ? saveToDo // 내용이 있으면 저장 함수 사용
                     : null, // 내용 없으면 함수 사용 X
                 child: Text(
-                  "저장",
+                  widget.todo != null ? "수정" : "저장",
                   style: TextStyle(
                     fontSize: 14,
                     color: canSave ? Colors.blue : Colors.red,

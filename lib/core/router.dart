@@ -18,8 +18,8 @@ final router = GoRouter(
         GoRoute(
           path: 'detail/:id',
           builder: (context, state) {
-          final id = int.parse(state.pathParameters['id'] ?? '');
-          return DetailPage(todoId: id.toString());
+          final id = state.pathParameters['id'] ?? '';
+          return DetailPage(todoId: id);
           },
         ),
       ],

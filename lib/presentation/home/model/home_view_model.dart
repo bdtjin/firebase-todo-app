@@ -61,6 +61,25 @@ class HomeViewModel extends Notifier<List<TodoEntity>> {
     await ref.read(toggleFavoriteUseCaseProvider).execute(todo: leFavoriteTodo);
     state = state.map((todo) => todo.id == id? leFavoriteTodo : todo).toList();
   }
+
+  // ViewModel - [할 일 수정]
+  Future<void> updateTodo({
+    required String id,
+    required String title,
+    required String description,
+    required bool isFavorite,
+    required bool isDone,
+  }) async {
+    final oldTodo = state.firstWhere((todo) => todo.id == id);
+    final updatedTodo = oldTodo.copyWith(
+      title: title,
+      description: description,
+      isFavorite: isFavorite,
+      isDone: isDone,
+    );
+    await ref.read(updateTodoUseCaseProvider).execute(todo: updatedTodo);
+    state = state.map((todo) => todo.id == id ? updatedTodo : todo).toList();
+  }
 }
 
 // 3. 뷰모델 관리자 만들기
