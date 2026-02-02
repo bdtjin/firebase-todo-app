@@ -1,3 +1,4 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,7 +73,52 @@ class TodoListView extends ConsumerWidget {
 
               IconButton(    // 삭제 버튼
                 onPressed: () {
-                  vm.deleteToDo(id: item.id); // 위에 만든 vm 함수 전달받아서 실행
+                  // 디바운싱 패키지 추가
+                  // 300ms 동안 같은 id로 delete 함수가 여러 번 호출되는 것을 방지
+                  // [DEBUG] 버튼 클릭 시 로그 출력 (디바운싱 전)
+                  print('Delete button clicked for item ${item.id}');
+                  EasyDebounce.debounce(
+                    'delete_${item.id}',
+                    const Duration(milliseconds: 300),
+                    () {
+                      // [DEBUG] 디바운싱 적용 후 실행 시점 로그 출력
+                      print('Debounced action executed for item ${item.id}');
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('정말 삭제하시겠습니까?',
+                            style: TextStyle(
+                              fontSize: 20
+                            ),),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('취소',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  vm.deleteToDo(id: item.id);
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('삭제',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  );
                 },
                 icon: Icon(Icons.delete_outline, color: Colors.grey),
               ),
