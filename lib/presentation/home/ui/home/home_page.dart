@@ -1,7 +1,7 @@
 import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
-import 'package:firebase_todo_app/presentation/home/ui/widgets/bottom_add_todo.dart';
-import 'package:firebase_todo_app/presentation/home/ui/widgets/no_todo.dart';
-import 'package:firebase_todo_app/presentation/home/ui/widgets/todo_list_view.dart';
+import 'package:firebase_todo_app/presentation/home/ui/home/widgets/bottom_add_todo.dart';
+import 'package:firebase_todo_app/presentation/home/ui/home/widgets/no_todo.dart';
+import 'package:firebase_todo_app/presentation/home/ui/home/widgets/todo_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final todos = ref.watch(homeViewModelProvider); // 홈뷰모델을 관리할거야! 선언
+    final todos = ref.watch(homeViewModelProvider); 
     return Scaffold(
       backgroundColor: Colors.grey[200],
 

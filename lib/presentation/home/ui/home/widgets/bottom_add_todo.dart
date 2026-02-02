@@ -107,7 +107,6 @@ class _AddToDoBottomState extends ConsumerState<BottomAddTodo> {
                   color: isFavorite ? Colors.amber : null,
                 ),
               ),
-
               Spacer(),
 
               TextButton(

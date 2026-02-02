@@ -1,6 +1,7 @@
 import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class TodoListView extends ConsumerWidget {
   @override
@@ -40,12 +41,21 @@ class TodoListView extends ConsumerWidget {
               ),
 
               Expanded(
-                child: Text(  // 할 일 Title 
-                  item.title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    decoration: item.isDone ? TextDecoration.lineThrough : null,
-                    color: item.isDone ? Colors.grey : Colors.black,
+                // 클릭 이벤트 추가 (Go Router)
+                child: GestureDetector(
+                  onTap: () {
+                    context.go('/detail/${item.id}');
+                  },
+                  child: Padding( // 클릭 시에 영역 확장
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Text(  // 할 일 Title 
+                      item.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        decoration: item.isDone ? TextDecoration.lineThrough : null,
+                        color: item.isDone ? Colors.grey : Colors.black,
+                      ),
+                    ),
                   ),
                 ),
               ),
