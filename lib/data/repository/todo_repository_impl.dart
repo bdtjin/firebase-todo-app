@@ -6,7 +6,10 @@ import 'package:firebase_todo_app/domain/repository/todo_repository.dart';
 
 // Data Layer (실제 데이터 저장소 구현) implement 작업
 class TodoRepositoryImpl implements TodoRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+
+  TodoRepositoryImpl({FirebaseFirestore? firestore})
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   // Firebase 안에 있는 문서 생성 및 가져오는 작업
   @override

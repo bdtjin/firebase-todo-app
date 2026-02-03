@@ -1,5 +1,6 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:firebase_todo_app/presentation/home/model/home_view_model.dart';
+import 'package:firebase_todo_app/presentation/home/ui/home/widgets/no_todo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,127 +11,140 @@ class TodoListView extends ConsumerWidget {
     // 5. onToggle 대신 ViewModel 구현 완료 후 ref 작성
     // UI에서 이벤트 발생 시에 HomeViewModel 작성한 함수 실행
     final vm = ref.read(homeViewModelProvider.notifier);
-    final todos = ref.watch(homeViewModelProvider);
+    final asyncTodos = ref.watch(homeViewModelProvider);
 
-    // 1. todo Container 작업 -> ListView.builder 씌우기
-    return ListView.builder(
-      padding: EdgeInsets.only(top: 10, bottom: 20),
-      itemCount: todos.length,
-      itemBuilder: (context, index) {
-        final item = todos[index]; // 데이터 순서 변수에 담기
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-
-          // 4. 아이콘 생성 및 데이터 전달 작업
-          child: Row(
-            children: [
-              IconButton(      // 힐 일 완료 버튼
-                onPressed: () {
-                  vm.toggleDone(isDone: !item.isDone, id: item.id,); // 위에 만든 vm 함수 전달받아서 실행
-                },
-                icon: Icon(
-                  item.isDone
-                      ? Icons.check_circle
-                      : Icons.radio_button_unchecked,
-                  color: item.isDone ? Colors.green : Colors.grey,
-                ),
+    return asyncTodos.when(
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      error: (error, stackTrace) => Center(
+        child: Text('Error: $error'),
+      ),
+      data: (todos) {
+        if (todos.isEmpty) {
+          return const NoTodo();
+        }
+        // 1. todo Container 작업 -> ListView.builder 씌우기
+        return ListView.builder(
+          padding: EdgeInsets.only(top: 10, bottom: 20),
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            final item = todos[index]; // 데이터 순서 변수에 담기
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
 
-              Expanded(
-                // 클릭 이벤트 추가 (Go Router)
-                child: GestureDetector(
-                  onTap: () {
-                    context.go('/detail/${item.id}');
-                  },
-                  child: Padding( // 클릭 시에 영역 확장
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    // Hero 위젯 추가 (동일한 tag 적용)
-                    child: Hero(
-                      tag: 'todo-title-${item.id}',
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Text(  // 할 일 Title 
-                          item.title,
-                          style: TextStyle(
-                            fontSize: 16,
-                            decoration: item.isDone ? TextDecoration.lineThrough : null,
-                            color: item.isDone ? Colors.grey : Colors.black,
+              // 4. 아이콘 생성 및 데이터 전달 작업
+              child: Row(
+                children: [
+                  IconButton(      // 힐 일 완료 버튼
+                    onPressed: () {
+                      vm.toggleDone(isDone: !item.isDone, id: item.id,); // 위에 만든 vm 함수 전달받아서 실행
+                    },
+                    icon: Icon(
+                      item.isDone
+                          ? Icons.check_circle
+                          : Icons.radio_button_unchecked,
+                      color: item.isDone ? Colors.green : Colors.grey,
+                    ),
+                  ),
+
+                  Expanded(
+                    // 클릭 이벤트 추가 (Go Router)
+                    child: GestureDetector(
+                      onTap: () {
+                        context.go('/detail/${item.id}');
+                      },
+                      child: Padding( // 클릭 시에 영역 확장
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        // Hero 위젯 추가 (동일한 tag 적용)
+                        child: Hero(
+                          tag: 'todo-title-${item.id}',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Text(  // 할 일 Title 
+                              item.title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                decoration: item.isDone ? TextDecoration.lineThrough : null,
+                                color: item.isDone ? Colors.grey : Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
 
-              IconButton(    // 즐겨찾기 버튼
-                onPressed: () {
-                  vm.toggleFavorite(isFavorite: !item.isFavorite, id: item.id); // 위에 만든 vm 함수 전달받아서 실행
-                },
-                icon: Icon(
-                  item.isFavorite ? Icons.star : Icons.star_border,
-                  color: item.isFavorite ? Colors.amber : Colors.grey,
-                ),
-              ),
+                  IconButton(    // 즐겨찾기 버튼
+                    onPressed: () {
+                      vm.toggleFavorite(isFavorite: !item.isFavorite, id: item.id); // 위에 만든 vm 함수 전달받아서 실행
+                    },
+                    icon: Icon(
+                      item.isFavorite ? Icons.star : Icons.star_border,
+                      color: item.isFavorite ? Colors.amber : Colors.grey,
+                    ),
+                  ),
 
-              IconButton(    // 삭제 버튼
-                onPressed: () {
-                  // 디바운싱 패키지 추가
-                  // 300ms 동안 같은 id로 delete 함수가 여러 번 호출되는 것을 방지
-                  // [DEBUG] 버튼 클릭 시 로그 출력 (디바운싱 전)
-                  print('Delete button clicked for item ${item.id}');
-                  EasyDebounce.debounce(
-                    'delete_${item.id}',
-                    const Duration(milliseconds: 300),
-                    () {
-                      // [DEBUG] 디바운싱 적용 후 실행 시점 로그 출력
-                      print('Debounced action executed for item ${item.id}');
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('정말 삭제하시겠습니까?',
-                            style: TextStyle(
-                              fontSize: 20
-                            ),),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('취소',
+                  IconButton(    // 삭제 버튼
+                    onPressed: () {
+                      // 디바운싱 패키지 추가
+                      // 300ms 동안 같은 id로 delete 함수가 여러 번 호출되는 것을 방지
+                      // [DEBUG] 버튼 클릭 시 로그 출력 (디바운싱 전)
+                      print('Delete button clicked for item ${item.id}');
+                      EasyDebounce.debounce(
+                        'delete_${item.id}',
+                        const Duration(milliseconds: 300),
+                        () {
+                          // [DEBUG] 디바운싱 적용 후 실행 시점 로그 출력
+                          print('Debounced action executed for item ${item.id}');
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('정말 삭제하시겠습니까?',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  vm.deleteToDo(id: item.id);
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('삭제',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                ),
-                                ),
-                              ),
-                            ],
+                                  fontSize: 20
+                                ),),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('취소',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      vm.deleteToDo(id: item.id);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('삭제',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                       );
                     },
-                  );
-                },
-                icon: Icon(Icons.delete_outline, color: Colors.grey),
+                    icon: Icon(Icons.delete_outline, color: Colors.grey),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

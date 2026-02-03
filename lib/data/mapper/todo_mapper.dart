@@ -1,5 +1,7 @@
+import 'package:firebase_todo_app/data/model/todo_dto.dart';
+
 import '../../domain/entity/todo_entity.dart';
-import '../model/todo_dto.dart';
+
 
 // DTO -> Entity
 // 기존의 DTO를 Domain Entity로 변환해주는 작업

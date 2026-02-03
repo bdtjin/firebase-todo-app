@@ -9,8 +9,25 @@ class DetailPage extends ConsumerWidget {
   final String todoId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(homeViewModelProvider);
-    final todo = todos.firstWhere((e) => e.id == todoId);
+    final asyncTodos = ref.watch(homeViewModelProvider);
+    
+    // 데이터가 없거나 로딩 중일 때 처리
+    if (!asyncTodos.hasValue) {
+        return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+        );
+    }
+
+    final todo = asyncTodos.value?.firstWhere(
+      (e) => e.id == todoId,
+      orElse: () => throw Exception('Todo not found'), // 또는 예외 처리
+    );
+
+    if (todo == null) {
+         return const Scaffold(
+            body: Center(child: Text("Todo not found")),
+        );
+    }
 
     return Scaffold(
       appBar: AppBar(
