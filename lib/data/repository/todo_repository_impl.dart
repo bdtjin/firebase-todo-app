@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_todo_app/data/mapper/todo_mapper.dart';
-import 'package:firebase_todo_app/data/model/todo_dto.dart';
+import 'package:firebase_todo_app/data/dto/mapper/todo_mapper.dart';
+import 'package:firebase_todo_app/data/dto/todo_dto.dart';
 import 'package:firebase_todo_app/domain/entity/todo_entity.dart';
 import 'package:firebase_todo_app/domain/repository/todo_repository.dart';
 
@@ -28,7 +28,6 @@ class TodoRepositoryImpl implements TodoRepository {
   }
 
   // 1. 할 일 추가 (Insert) 구현
-  // id, title, description, favorite, isDone => firebase에 저장해줘!
   @override
   Future<void> insert({required TodoEntity todo}) async {
     // 2) 컬렉션 참조 생성: todos 라는 이름의 폴더(컬렉션) 만듬

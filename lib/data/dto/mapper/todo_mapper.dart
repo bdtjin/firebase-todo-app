@@ -1,6 +1,6 @@
-import 'package:firebase_todo_app/data/model/todo_dto.dart';
+import 'package:firebase_todo_app/data/dto/todo_dto.dart';
 
-import '../../domain/entity/todo_entity.dart';
+import '../../../domain/entity/todo_entity.dart';
 
 
 // DTO -> Entity

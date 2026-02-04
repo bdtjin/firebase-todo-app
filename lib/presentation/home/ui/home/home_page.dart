@@ -26,7 +26,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final todos = ref.watch(homeViewModelProvider); // Removed unused variable 
     return Scaffold(
       backgroundColor: Colors.grey[200],
 

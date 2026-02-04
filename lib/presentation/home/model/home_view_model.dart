@@ -32,32 +32,17 @@ class HomeViewModel extends AsyncNotifier<List<TodoEntity>> {
       isDone: false,
     );
 
-    // Optimistic update or wait for server?
-    // Let's guard the operation
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await ref.read(addTodoUseCaseProvider).execute(todo: newTodo);
-      // Re-fetch or manually update?
-      // Manually update for efficiency if we trust the operation, but here we can just append to previous state if available.
-      // However, simplified approach with guard essentially re-runs build or we just return the new list.
-      // Let's implement manual append to avoid re-fetch if possible, BUT AsyncValue.guard expects a return of the new state type.
-      // So we need to return the new list.
-      // But we don't have the "previous" list easily inside guard if we don't capture it.
       
-      // Better approach for simple CRUD without strict re-fetch requirements:
-      // Just do the operation and then update state.
-      // But we want to handle loading/error.
-      
-      // Let's stick to the previous logic but wrapped in AsyncValue
-      // But simple refactor first:
-      
-      // 1. Get current list
+      // 현재 목록 가져오기
       final currentList = state.value ?? [];
       
-      // 2. Execute UseCase
+      // 유즈케이스 실행
       await ref.read(addTodoUseCaseProvider).execute(todo: newTodo);
       
-      // 3. Return new list
+      // 새 목록 반환
       return [newTodo, ...currentList];
     });
   }
@@ -66,8 +51,7 @@ class HomeViewModel extends AsyncNotifier<List<TodoEntity>> {
   Future<void> deleteToDo({required String id}) async {
     final currentList = state.value ?? [];
     
-    // Optimistic: Update UI immediately (optional, but good for UX) -> Actually standard is guard.
-    // Let's just do standard async update
+    // 현재 목록 가져오기
     state = await AsyncValue.guard(() async {
       await ref.read(deleteTodoUseCaseProvider).execute(id: id);
       return currentList.where((todo) => todo.id != id).toList();
